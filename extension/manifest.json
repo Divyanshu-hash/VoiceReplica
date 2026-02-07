@@ -1,0 +1,38 @@
+{
+    "manifest_version": 3,
+    "name": "VoiceReplica",
+    "version": "1.0",
+    "description": "Agentic Voice-Activated Browser Automation",
+    "permissions": [
+        "activeTab",
+        "scripting",
+        "storage",
+        "tts",
+        "tabs",
+        "sidePanel",
+        "contextMenus"
+    ],
+    "host_permissions": [
+        "https://www.irctc.co.in/*",
+        "https://www.google.com/*"
+    ],
+    "background": {
+        "service_worker": "background.js"
+    },
+    "side_panel": {
+        "default_path": "popup/popup.html"
+    },
+    "action": {
+        "default_title": "VoiceReplica"
+    },
+    "content_scripts": [
+        {
+            "matches": [
+                "<all_urls>"
+            ],
+            "js": [
+                "content.js"
+            ]
+        }
+    ]
+}
