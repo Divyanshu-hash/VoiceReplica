@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VoiceReplica Premium</title>
+    <link rel="stylesheet" href="popup.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <h2>VoiceReplica</h2>
+        <span class="version">AI AGENT v2.0</span>
+    </header>
+
+    <div class="mic-wrapper">
+        <button id="toggleBtn" class="mic-btn" aria-label="Toggle Recording">
+            <!-- Simple SVG Mic Icon -->
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 14C14.2091 14 16 12.2091 16 10V5C16 2.79086 14.2091 1 12 1C9.79086 1 8 2.79086 8 5V10C8 12.2091 9.79086 14 12 14Z" fill="currentColor"/>
+                <path d="M19 10C19 13.866 15.866 17 12 17C8.13401 17 5 13.866 5 10H3C3 14.5055 6.34807 18.2393 10.6869 18.8878L10.2222 22H13.7778L13.3131 18.8878C17.6519 18.2393 21 14.5055 21 10H19Z" fill="currentColor"/>
+            </svg>
+        </button>
+        <div class="pulse-ring"></div>
+    </div>
+
+    <div id="status" class="status">Tap to speak</div>
+
+    <div class="transcript-card">
+        <div id="transcript">
+            <!-- Transcript goes here -->
+            <div class="placeholder">
+                <p>Say "Go to google.com..."</p>
+                <p style="margin-top:5px; font-size:11px; opacity:0.7;">or "Summarize this page"</p>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="popup.js"></script>
+</body>
+</html>
