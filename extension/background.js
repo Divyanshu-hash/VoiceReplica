@@ -175,32 +175,13 @@ function irctcAutomationScript(origin, destination, travelDate) {
             const typeAndSelect = async (input, text) => {
                 if (!input) return;
 
-                console.log(`Typing "${text}" into`, input);
-
                 input.focus();
-                await sleep(200);
-
-                // Robust Clear: Select All + Delete approach
-                // This handles cases where IRCTC remembers the last search (e.g. Kota -> Udaipur)
-                input.setSelectionRange(0, input.value.length);
-
-                // Force empty first
-                const nativeInputValueSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, "value").set;
-                if (nativeInputValueSetter) {
-                    nativeInputValueSetter.call(input, "");
-                } else {
-                    input.value = "";
-                }
+                input.value = "";
                 input.dispatchEvent(new Event('input', { bubbles: true }));
                 await sleep(200);
 
-                // Now simulate typing the new value string
-                if (nativeInputValueSetter) {
-                    nativeInputValueSetter.call(input, text.toUpperCase());
-                } else {
-                    input.value = text.toUpperCase();
-                }
-
+                // Simulate typing - IRCTC expects Uppercase usually
+                input.value = text.toUpperCase();
                 input.dispatchEvent(new Event('input', { bubbles: true }));
                 input.dispatchEvent(new Event('keydown', { bubbles: true }));
                 input.dispatchEvent(new Event('keyup', { bubbles: true }));
@@ -237,30 +218,18 @@ function irctcAutomationScript(origin, destination, travelDate) {
 
             // 1. Enter Origin
             // Selector: p-autocomplete[id="origin"] input
+            const originInput = document.querySelector('p-autocomplete[formcontrolname="origin"] input') ||
+                document.querySelector('input[aria-controls="pr_id_1_list"]');
             // Fallback: generic p-autocomplete input
             const inputs = document.querySelectorAll('p-autocomplete input');
 
-            // Explicitly prefer the first input for Origin if specific selector fails
-            const originInput = document.querySelector('p-autocomplete[formcontrolname="origin"] input') ||
-                document.querySelector('input[aria-controls="pr_id_1_list"]') ||
-                inputs[0];
-
-            console.log("Setting Origin...");
-            await typeAndSelect(originInput, origin);
+            await typeAndSelect(originInput || inputs[0], origin);
 
             // 2. Enter Destination
-            // Explicitly prefer the second input for Destination
-            let destInput = document.querySelector('p-autocomplete[formcontrolname="destination"] input') ||
+            const destInput = document.querySelector('p-autocomplete[formcontrolname="destination"] input') ||
                 document.querySelector('input[aria-controls="pr_id_2_list"]');
 
-            // Safety check: ensure we didn't select the same element
-            if (!destInput || destInput === originInput) {
-                console.warn("Destination selector matched Origin or was null. Falling back to inputs[1].");
-                destInput = inputs[1];
-            }
-
-            console.log("Setting Destination...");
-            await typeAndSelect(destInput, destination);
+            await typeAndSelect(destInput || inputs[1], destination);
 
             // 3. Enter Date (if provided)
             if (travelDate) {
